@@ -99,14 +99,14 @@ function salvarUsuario(ss, d) {
   var headers = [
     'Timestamp','Nome do usuário','RG','CPF','Data nascimento','Sexo','E-mail',
     'CEP','Tipo endereço','Endereço','Número','Bairro','Cidade','Estado','País',
-    'DDD','Telefone celular','Nro. conselho + estado','Local de trabalho','Cargo','Área de trabalho'
+    'DDD','Telefone celular','Nro. conselho + estado','Local de trabalho','Cargo','Área de trabalho','Área de trabalho (outra)'
   ];
   var sheet = getOrCreateSheet(ss, 'Usuarios', headers);
 
   var row = [
     new Date(), d.nome_usuario || '', d.rg || '', d.cpf || '', d.data_nascimento || '', d.sexo || '', d.email_usuario || '',
     d.cep_usuario || '', d.tipo_endereco || '', d.endereco_usuario || '', d.numero_usuario || '', d.bairro_usuario || '', d.cidade_usuario || '', d.estado_usuario || '', d.pais || '',
-    d.ddd || '', d.telefone_celular || '', d.conselho_estado || '', d.local_trabalho || '', d.cargo || '', d.area_trabalho || ''
+    d.ddd || '', d.telefone_celular || '', d.conselho_estado || '', d.local_trabalho || '', d.cargo || '', multi(d, 'area_trabalho'), d.area_trabalho_outra || ''
   ];
   sheet.appendRow(row);
 }

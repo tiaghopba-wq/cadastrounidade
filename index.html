@@ -523,21 +523,21 @@
     </datalist>
 
     <label>Área de trabalho</label>
-    <select name="area_trabalho" required>
-      <option value="">Selecione...</option>
-      <option value="Atendimento">Atendimento</option>
-      <option value="Vacinas">Vacinas</option>
-      <option value="Recursos Humanos">Recursos Humanos</option>
-      <option value="Qualidade">Qualidade</option>
-      <option value="Financeiro">Financeiro</option>
-      <option value="Faturamento">Faturamento</option>
-      <option value="Área Técnica">Área Técnica</option>
-      <option value="Estoque">Estoque</option>
-      <option value="Compras">Compras</option>
-      <option value="Direção">Direção</option>
-      <option value="Manutenção">Manutenção</option>
-      <option value="Outra">Outra</option>
-    </select>
+    <div class="checkbox-group" data-group="area_trabalho">
+      <label><input type="checkbox" name="area_trabalho" value="Atendimento"> Atendimento</label>
+      <label><input type="checkbox" name="area_trabalho" value="Vacinas"> Vacinas</label>
+      <label><input type="checkbox" name="area_trabalho" value="Recursos Humanos"> Recursos Humanos</label>
+      <label><input type="checkbox" name="area_trabalho" value="Qualidade"> Qualidade</label>
+      <label><input type="checkbox" name="area_trabalho" value="Financeiro"> Financeiro</label>
+      <label><input type="checkbox" name="area_trabalho" value="Faturamento"> Faturamento</label>
+      <label><input type="checkbox" name="area_trabalho" value="Área Técnica"> Área Técnica</label>
+      <label><input type="checkbox" name="area_trabalho" value="Estoque"> Estoque</label>
+      <label><input type="checkbox" name="area_trabalho" value="Compras"> Compras</label>
+      <label><input type="checkbox" name="area_trabalho" value="Direção"> Direção</label>
+      <label><input type="checkbox" name="area_trabalho" value="Manutenção"> Manutenção</label>
+      <label><input type="checkbox" id="areaTrabalhoOutraCheck" name="area_trabalho" value="Outra"> Outra</label>
+    </div>
+    <input type="text" id="areaTrabalhoOutraTexto" name="area_trabalho_outra" placeholder="Especifique a área de trabalho" style="display:none; margin-top:8px;">
 
     <button type="submit" id="submitBtnUsuario">Enviar Cadastro de Usuário</button>
   </form>
@@ -549,6 +549,14 @@
 <script>
   // URL do Apps Script implantado como Web App
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwhkFZ8IDk_AX34Ee7sVRxM0R6aswHYuy-qSnZl7gV5-aIkm-ommSM3kmbtzWbr4ayn/exec";
+
+  const areaOutraCheck = document.getElementById('areaTrabalhoOutraCheck');
+  const areaOutraTexto = document.getElementById('areaTrabalhoOutraTexto');
+  areaOutraCheck.addEventListener('change', function () {
+    areaOutraTexto.style.display = areaOutraCheck.checked ? 'block' : 'none';
+    areaOutraTexto.required = areaOutraCheck.checked;
+    if (!areaOutraCheck.checked) areaOutraTexto.value = '';
+  });
 
   document.querySelectorAll('.somente-numero').forEach(function (input) {
     input.addEventListener('input', function () {
