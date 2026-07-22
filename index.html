@@ -22,11 +22,15 @@
   button:disabled { background:#9bb8dd; cursor:not-allowed; }
   .successMsg { display:none; background:#e6f6ea; border:1px solid #34a853; color:#1e7e34; padding:16px; border-radius:6px; margin-top:20px; font-weight:bold; }
   .divisor { margin:40px 0; border:none; border-top:2px solid #eee; }
-  .horario-semana { margin-top:6px; }
-  .horario-dia { display:flex; align-items:flex-end; gap:16px; flex-wrap:wrap; padding:10px 0; border-bottom:1px solid #f0f0f0; }
-  .horario-dia .dia-nome { min-width:100px; font-weight:bold; font-size:13px; color:#333; padding-bottom:8px; }
-  .horario-dia label { display:flex; flex-direction:column; font-weight:normal; font-size:12px; color:#333; margin:0; }
-  .horario-dia input { width:auto; min-width:110px; margin-top:2px; }
+  .horario-semana { display:flex; flex-direction:column; gap:12px; margin-top:8px; }
+  .horario-dia { background:#f8fafc; border:1px solid #e3e8ef; border-left:4px solid #2c7be5; border-radius:8px; padding:14px 16px; transition:box-shadow .15s ease; }
+  .horario-dia:hover { box-shadow:0 2px 6px rgba(44,123,229,0.12); }
+  .horario-dia .dia-nome { font-weight:bold; font-size:14px; color:#2c3e50; margin-bottom:12px; }
+  .horario-dia-blocos { display:flex; gap:32px; flex-wrap:wrap; }
+  .horario-bloco-titulo { display:block; font-size:11px; font-weight:bold; text-transform:uppercase; letter-spacing:.04em; color:#8a94a6; margin-bottom:6px; }
+  .horario-campos { display:flex; gap:12px; flex-wrap:wrap; }
+  .horario-campos label { display:flex; flex-direction:column; font-weight:normal; font-size:12px; color:#333; margin:0; }
+  .horario-campos input[type=time] { width:auto; min-width:110px; padding:7px 8px; margin-top:4px; border:1px solid #ccc; border-radius:4px; font-size:13px; }
 </style>
 </head>
 <body>
@@ -117,46 +121,137 @@
     <label>Horário de atendimento</label>
     <div class="horario-semana">
       <div class="horario-dia">
-        <span class="dia-nome">Segunda-feira</span>
-        <label>Início<input type="time" name="horario_seg_inicio"></label>
-        <label>Intervalo<input type="text" name="horario_seg_intervalo" placeholder="ex: 12:00 às 13:00"></label>
-        <label>Fim<input type="time" name="horario_seg_fim"></label>
+        <div class="dia-nome">Segunda-feira</div>
+        <div class="horario-dia-blocos">
+          <div class="horario-bloco">
+            <span class="horario-bloco-titulo">Expediente</span>
+            <div class="horario-campos">
+              <label>Abre<input type="time" name="horario_seg_inicio"></label>
+              <label>Fecha<input type="time" name="horario_seg_fim"></label>
+            </div>
+          </div>
+          <div class="horario-bloco">
+            <span class="horario-bloco-titulo">Intervalo</span>
+            <div class="horario-campos">
+              <label>Início<input type="time" name="horario_seg_intervalo_inicio"></label>
+              <label>Fim<input type="time" name="horario_seg_intervalo_fim"></label>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="horario-dia">
-        <span class="dia-nome">Terça-feira</span>
-        <label>Início<input type="time" name="horario_ter_inicio"></label>
-        <label>Intervalo<input type="text" name="horario_ter_intervalo" placeholder="ex: 12:00 às 13:00"></label>
-        <label>Fim<input type="time" name="horario_ter_fim"></label>
+        <div class="dia-nome">Terça-feira</div>
+        <div class="horario-dia-blocos">
+          <div class="horario-bloco">
+            <span class="horario-bloco-titulo">Expediente</span>
+            <div class="horario-campos">
+              <label>Abre<input type="time" name="horario_ter_inicio"></label>
+              <label>Fecha<input type="time" name="horario_ter_fim"></label>
+            </div>
+          </div>
+          <div class="horario-bloco">
+            <span class="horario-bloco-titulo">Intervalo</span>
+            <div class="horario-campos">
+              <label>Início<input type="time" name="horario_ter_intervalo_inicio"></label>
+              <label>Fim<input type="time" name="horario_ter_intervalo_fim"></label>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="horario-dia">
-        <span class="dia-nome">Quarta-feira</span>
-        <label>Início<input type="time" name="horario_qua_inicio"></label>
-        <label>Intervalo<input type="text" name="horario_qua_intervalo" placeholder="ex: 12:00 às 13:00"></label>
-        <label>Fim<input type="time" name="horario_qua_fim"></label>
+        <div class="dia-nome">Quarta-feira</div>
+        <div class="horario-dia-blocos">
+          <div class="horario-bloco">
+            <span class="horario-bloco-titulo">Expediente</span>
+            <div class="horario-campos">
+              <label>Abre<input type="time" name="horario_qua_inicio"></label>
+              <label>Fecha<input type="time" name="horario_qua_fim"></label>
+            </div>
+          </div>
+          <div class="horario-bloco">
+            <span class="horario-bloco-titulo">Intervalo</span>
+            <div class="horario-campos">
+              <label>Início<input type="time" name="horario_qua_intervalo_inicio"></label>
+              <label>Fim<input type="time" name="horario_qua_intervalo_fim"></label>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="horario-dia">
-        <span class="dia-nome">Quinta-feira</span>
-        <label>Início<input type="time" name="horario_qui_inicio"></label>
-        <label>Intervalo<input type="text" name="horario_qui_intervalo" placeholder="ex: 12:00 às 13:00"></label>
-        <label>Fim<input type="time" name="horario_qui_fim"></label>
+        <div class="dia-nome">Quinta-feira</div>
+        <div class="horario-dia-blocos">
+          <div class="horario-bloco">
+            <span class="horario-bloco-titulo">Expediente</span>
+            <div class="horario-campos">
+              <label>Abre<input type="time" name="horario_qui_inicio"></label>
+              <label>Fecha<input type="time" name="horario_qui_fim"></label>
+            </div>
+          </div>
+          <div class="horario-bloco">
+            <span class="horario-bloco-titulo">Intervalo</span>
+            <div class="horario-campos">
+              <label>Início<input type="time" name="horario_qui_intervalo_inicio"></label>
+              <label>Fim<input type="time" name="horario_qui_intervalo_fim"></label>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="horario-dia">
-        <span class="dia-nome">Sexta-feira</span>
-        <label>Início<input type="time" name="horario_sex_inicio"></label>
-        <label>Intervalo<input type="text" name="horario_sex_intervalo" placeholder="ex: 12:00 às 13:00"></label>
-        <label>Fim<input type="time" name="horario_sex_fim"></label>
+        <div class="dia-nome">Sexta-feira</div>
+        <div class="horario-dia-blocos">
+          <div class="horario-bloco">
+            <span class="horario-bloco-titulo">Expediente</span>
+            <div class="horario-campos">
+              <label>Abre<input type="time" name="horario_sex_inicio"></label>
+              <label>Fecha<input type="time" name="horario_sex_fim"></label>
+            </div>
+          </div>
+          <div class="horario-bloco">
+            <span class="horario-bloco-titulo">Intervalo</span>
+            <div class="horario-campos">
+              <label>Início<input type="time" name="horario_sex_intervalo_inicio"></label>
+              <label>Fim<input type="time" name="horario_sex_intervalo_fim"></label>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="horario-dia">
-        <span class="dia-nome">Sábado</span>
-        <label>Início<input type="time" name="horario_sab_inicio"></label>
-        <label>Intervalo<input type="text" name="horario_sab_intervalo" placeholder="ex: 12:00 às 13:00"></label>
-        <label>Fim<input type="time" name="horario_sab_fim"></label>
+        <div class="dia-nome">Sábado</div>
+        <div class="horario-dia-blocos">
+          <div class="horario-bloco">
+            <span class="horario-bloco-titulo">Expediente</span>
+            <div class="horario-campos">
+              <label>Abre<input type="time" name="horario_sab_inicio"></label>
+              <label>Fecha<input type="time" name="horario_sab_fim"></label>
+            </div>
+          </div>
+          <div class="horario-bloco">
+            <span class="horario-bloco-titulo">Intervalo</span>
+            <div class="horario-campos">
+              <label>Início<input type="time" name="horario_sab_intervalo_inicio"></label>
+              <label>Fim<input type="time" name="horario_sab_intervalo_fim"></label>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="horario-dia">
-        <span class="dia-nome">Domingo</span>
-        <label>Início<input type="time" name="horario_dom_inicio"></label>
-        <label>Intervalo<input type="text" name="horario_dom_intervalo" placeholder="ex: 12:00 às 13:00"></label>
-        <label>Fim<input type="time" name="horario_dom_fim"></label>
+        <div class="dia-nome">Domingo</div>
+        <div class="horario-dia-blocos">
+          <div class="horario-bloco">
+            <span class="horario-bloco-titulo">Expediente</span>
+            <div class="horario-campos">
+              <label>Abre<input type="time" name="horario_dom_inicio"></label>
+              <label>Fecha<input type="time" name="horario_dom_fim"></label>
+            </div>
+          </div>
+          <div class="horario-bloco">
+            <span class="horario-bloco-titulo">Intervalo</span>
+            <div class="horario-campos">
+              <label>Início<input type="time" name="horario_dom_intervalo_inicio"></label>
+              <label>Fim<input type="time" name="horario_dom_intervalo_fim"></label>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
