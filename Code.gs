@@ -45,29 +45,42 @@ function salvarArquivo(fileObj, pastaNome) {
 
 function salvarUnidadeColeta(ss, d) {
   var headers = [
-    'Timestamp','Grupo/Empresa','Descrição (Nome da Unidade)','Cartão internet','Regional','Unidade',
-    'Maioridade (exceção)','C.N.E.S.','Responsável técnico','Obrigatoriedade',
+    'Timestamp','Grupo/Empresa','Descrição (Nome da Unidade)','Regional',
+    'C.N.E.S.','Responsável técnico','Obrigatoriedade',
     'CEP','Logradouro','Complemento','Número','Bairro','Cidade','Estado','Telefone',
-    'Segmento','Categoria','Atendimento','Informações de atendimento',
-    'Permite emergência','Permite prazo mínimo','Endereço hospitalar','Pedido externo','Prontuário',
-    'Autorização paciente O.S.','Status inicial procedimento','Dia produção padrão','Dia entrega padrão',
+    'Segmento','Categoria','Atendimento',
+    'Horário Segunda (Início)','Horário Segunda (Intervalo)','Horário Segunda (Fim)',
+    'Horário Terça (Início)','Horário Terça (Intervalo)','Horário Terça (Fim)',
+    'Horário Quarta (Início)','Horário Quarta (Intervalo)','Horário Quarta (Fim)',
+    'Horário Quinta (Início)','Horário Quinta (Intervalo)','Horário Quinta (Fim)',
+    'Horário Sexta (Início)','Horário Sexta (Intervalo)','Horário Sexta (Fim)',
+    'Horário Sábado (Início)','Horário Sábado (Intervalo)','Horário Sábado (Fim)',
+    'Horário Domingo (Início)','Horário Domingo (Intervalo)','Horário Domingo (Fim)',
+    'Dias de produção dos exames','Dias de entrega dos resultados',
     'Empresa prestadora','Percentual máximo desconto','Imprime resultado em débito',
-    'Transportar amostras em','Fechar malote','Malote agrupado por','Unidade destino por',
-    'Tempo de transporte (min)','Template de laudo','Template e-LIS','Regras impressão por ação'
+    'Tempo até a unidade de processamento (min)',
+    'Usará template com logomarca','Logomarca do template (link)'
   ];
   var sheet = getOrCreateSheet(ss, 'UnidadeColeta', headers);
 
+  var linkTemplateLogo = salvarArquivo(d.template_logo, 'Templates Unidade de Coleta');
+
   var row = [
-    new Date(), d.grupo_empresa || '', d.descricao || '', d.cartao_internet || '', d.regional || '', d.unidade || '',
-    d.maioridade_excecao || '', d.cnes || '', d.responsavel_tecnico || '', multi(d, 'obrigatoriedade'),
+    new Date(), d.grupo_empresa || '', d.descricao || '', d.regional || '',
+    d.cnes || '', d.responsavel_tecnico || '', multi(d, 'obrigatoriedade'),
     d.cep || '', d.logradouro || '', d.complemento || '', d.numero_endereco || '', d.bairro || '', d.cidade || '', d.estado || '', d.telefone || '',
-    multi(d, 'segmento'), d.categoria || '', d.atendimento || '', d.inf_atendimento || '',
-    d.permite_emergencia ? 'Sim' : 'Não', d.permite_prazo_minimo ? 'Sim' : 'Não', d.endereco_hospitalar ? 'Sim' : 'Não',
-    d.pedido_externo ? 'Sim' : 'Não', d.prontuario ? 'Sim' : 'Não', d.autorizacao_paciente_os ? 'Sim' : 'Não',
-    d.status_inicial_procedimento || '', d.dia_producao_padrao ? 'Sim' : 'Não', d.dia_entrega_padrao ? 'Sim' : 'Não',
+    multi(d, 'segmento'), multi(d, 'categoria'), d.atendimento || '',
+    d.horario_seg_inicio || '', d.horario_seg_intervalo || '', d.horario_seg_fim || '',
+    d.horario_ter_inicio || '', d.horario_ter_intervalo || '', d.horario_ter_fim || '',
+    d.horario_qua_inicio || '', d.horario_qua_intervalo || '', d.horario_qua_fim || '',
+    d.horario_qui_inicio || '', d.horario_qui_intervalo || '', d.horario_qui_fim || '',
+    d.horario_sex_inicio || '', d.horario_sex_intervalo || '', d.horario_sex_fim || '',
+    d.horario_sab_inicio || '', d.horario_sab_intervalo || '', d.horario_sab_fim || '',
+    d.horario_dom_inicio || '', d.horario_dom_intervalo || '', d.horario_dom_fim || '',
+    multi(d, 'dias_producao'), multi(d, 'dias_entrega'),
     d.empresa_prestadora || '', d.percentual_max_desconto || '', d.imprime_resultado_debito ? 'Sim' : 'Não',
-    d.transportar_amostras_em || '', d.fechar_malote || '', d.malote_agrupado_por || '', d.unidade_destino_por || '',
-    d.tempo_transporte || '', d.template_laudo || '', d.template_elis || '', d.regras_impressao_acao || ''
+    d.tempo_transporte || '',
+    d.usa_template_logomarca || '', linkTemplateLogo
   ];
   sheet.appendRow(row);
 }

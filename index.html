@@ -22,6 +22,11 @@
   button:disabled { background:#9bb8dd; cursor:not-allowed; }
   .successMsg { display:none; background:#e6f6ea; border:1px solid #34a853; color:#1e7e34; padding:16px; border-radius:6px; margin-top:20px; font-weight:bold; }
   .divisor { margin:40px 0; border:none; border-top:2px solid #eee; }
+  .horario-semana { margin-top:6px; }
+  .horario-dia { display:flex; align-items:flex-end; gap:16px; flex-wrap:wrap; padding:10px 0; border-bottom:1px solid #f0f0f0; }
+  .horario-dia .dia-nome { min-width:100px; font-weight:bold; font-size:13px; color:#333; padding-bottom:8px; }
+  .horario-dia label { display:flex; flex-direction:column; font-weight:normal; font-size:12px; color:#333; margin:0; }
+  .horario-dia input { width:auto; min-width:110px; margin-top:2px; }
 </style>
 </head>
 <body>
@@ -51,20 +56,8 @@
     <label>Nome da Unidade (Descrição)</label>
     <input type="text" name="descricao" required>
 
-    <label>Cartão internet</label>
-    <select name="cartao_internet" required>
-      <option value="Não Imprime">Não Imprime</option>
-      <option value="Imprime">Imprime</option>
-    </select>
-
     <label>Regional</label>
     <input type="text" name="regional" required>
-
-    <label>Unidade (código/nome interno)</label>
-    <input type="text" name="unidade" required>
-
-    <label>Maioridade (exceção)</label>
-    <input type="text" name="maioridade_excecao" required>
 
     <label>C.N.E.S.</label>
     <input type="text" name="cnes" required>
@@ -113,32 +106,80 @@
     </div>
 
     <label>Categoria</label>
-    <input type="text" name="categoria" required>
+    <div class="checkbox-group" data-group="categoria">
+      <label><input type="checkbox" name="categoria" value="Humano"> Humano</label>
+      <label><input type="checkbox" name="categoria" value="Animal"> Animal</label>
+    </div>
 
     <label>Atendimento</label>
     <input type="text" name="atendimento" required>
 
-    <label>Informações de atendimento</label>
-    <textarea name="inf_atendimento" rows="3" required></textarea>
-
-    <div class="checkbox-group" style="margin-top:14px;">
-      <label><input type="checkbox" name="permite_emergencia"> Permite emergência</label><br>
-      <label><input type="checkbox" name="permite_prazo_minimo"> Permite utilizar botão de prazo mínimo</label><br>
-      <label><input type="checkbox" name="endereco_hospitalar"> Endereço hospitalar</label><br>
-      <label><input type="checkbox" name="pedido_externo"> Pedido externo</label><br>
-      <label><input type="checkbox" name="prontuario"> Prontuário</label><br>
-      <label><input type="checkbox" name="autorizacao_paciente_os"> Autorização do paciente obrigatória no cadastro da O.S.</label>
+    <label>Horário de atendimento</label>
+    <div class="horario-semana">
+      <div class="horario-dia">
+        <span class="dia-nome">Segunda-feira</span>
+        <label>Início<input type="time" name="horario_seg_inicio"></label>
+        <label>Intervalo<input type="text" name="horario_seg_intervalo" placeholder="ex: 12:00 às 13:00"></label>
+        <label>Fim<input type="time" name="horario_seg_fim"></label>
+      </div>
+      <div class="horario-dia">
+        <span class="dia-nome">Terça-feira</span>
+        <label>Início<input type="time" name="horario_ter_inicio"></label>
+        <label>Intervalo<input type="text" name="horario_ter_intervalo" placeholder="ex: 12:00 às 13:00"></label>
+        <label>Fim<input type="time" name="horario_ter_fim"></label>
+      </div>
+      <div class="horario-dia">
+        <span class="dia-nome">Quarta-feira</span>
+        <label>Início<input type="time" name="horario_qua_inicio"></label>
+        <label>Intervalo<input type="text" name="horario_qua_intervalo" placeholder="ex: 12:00 às 13:00"></label>
+        <label>Fim<input type="time" name="horario_qua_fim"></label>
+      </div>
+      <div class="horario-dia">
+        <span class="dia-nome">Quinta-feira</span>
+        <label>Início<input type="time" name="horario_qui_inicio"></label>
+        <label>Intervalo<input type="text" name="horario_qui_intervalo" placeholder="ex: 12:00 às 13:00"></label>
+        <label>Fim<input type="time" name="horario_qui_fim"></label>
+      </div>
+      <div class="horario-dia">
+        <span class="dia-nome">Sexta-feira</span>
+        <label>Início<input type="time" name="horario_sex_inicio"></label>
+        <label>Intervalo<input type="text" name="horario_sex_intervalo" placeholder="ex: 12:00 às 13:00"></label>
+        <label>Fim<input type="time" name="horario_sex_fim"></label>
+      </div>
+      <div class="horario-dia">
+        <span class="dia-nome">Sábado</span>
+        <label>Início<input type="time" name="horario_sab_inicio"></label>
+        <label>Intervalo<input type="text" name="horario_sab_intervalo" placeholder="ex: 12:00 às 13:00"></label>
+        <label>Fim<input type="time" name="horario_sab_fim"></label>
+      </div>
+      <div class="horario-dia">
+        <span class="dia-nome">Domingo</span>
+        <label>Início<input type="time" name="horario_dom_inicio"></label>
+        <label>Intervalo<input type="text" name="horario_dom_intervalo" placeholder="ex: 12:00 às 13:00"></label>
+        <label>Fim<input type="time" name="horario_dom_fim"></label>
+      </div>
     </div>
 
-    <label>Status inicial do procedimento</label>
-    <div class="radio-group">
-      <label><input type="radio" name="status_inicial_procedimento" value="Aguardando Amostra"> Aguardando Amostra</label>
-      <label><input type="radio" name="status_inicial_procedimento" value="Hold Unidade"> Hold Unidade</label>
+    <label>Quais dias da semana são realizados os exames</label>
+    <div class="checkbox-group" data-group="dias_producao">
+      <label><input type="checkbox" name="dias_producao" value="Segunda"> Segunda</label>
+      <label><input type="checkbox" name="dias_producao" value="Terça"> Terça</label>
+      <label><input type="checkbox" name="dias_producao" value="Quarta"> Quarta</label>
+      <label><input type="checkbox" name="dias_producao" value="Quinta"> Quinta</label>
+      <label><input type="checkbox" name="dias_producao" value="Sexta"> Sexta</label>
+      <label><input type="checkbox" name="dias_producao" value="Sábado"> Sábado</label>
+      <label><input type="checkbox" name="dias_producao" value="Domingo"> Domingo</label>
     </div>
 
-    <div class="checkbox-group" style="margin-top:14px;">
-      <label><input type="checkbox" name="dia_producao_padrao"> Dia de produção: usar padrão do sistema</label><br>
-      <label><input type="checkbox" name="dia_entrega_padrao"> Dia de entrega: usar padrão do sistema</label>
+    <label>Quais dias da semana são entregues os resultados dos exames</label>
+    <div class="checkbox-group" data-group="dias_entrega">
+      <label><input type="checkbox" name="dias_entrega" value="Segunda"> Segunda</label>
+      <label><input type="checkbox" name="dias_entrega" value="Terça"> Terça</label>
+      <label><input type="checkbox" name="dias_entrega" value="Quarta"> Quarta</label>
+      <label><input type="checkbox" name="dias_entrega" value="Quinta"> Quinta</label>
+      <label><input type="checkbox" name="dias_entrega" value="Sexta"> Sexta</label>
+      <label><input type="checkbox" name="dias_entrega" value="Sábado"> Sábado</label>
+      <label><input type="checkbox" name="dias_entrega" value="Domingo"> Domingo</label>
     </div>
 
     <h2>Pagamento</h2>
@@ -152,45 +193,19 @@
       <label><input type="checkbox" name="imprime_resultado_debito"> Imprime resultado em débito</label>
     </div>
 
-    <h2>Amostras</h2>
-    <label>Transportar amostras em</label>
-    <div class="radio-group">
-      <label><input type="radio" name="transportar_amostras_em" value="Malote"> Malote</label>
-      <label><input type="radio" name="transportar_amostras_em" value="Caixa"> Caixa</label>
-    </div>
-
-    <label>Fechar malote</label>
-    <div class="radio-group">
-      <label><input type="radio" name="fechar_malote" value="Completo"> Completo</label>
-      <label><input type="radio" name="fechar_malote" value="Por amostra"> Por amostra</label>
-      <label><input type="radio" name="fechar_malote" value="Ambos"> Ambos</label>
-    </div>
-
-    <label>Malote agrupado por</label>
-    <div class="radio-group">
-      <label><input type="radio" name="malote_agrupado_por" value="Und. coleta"> Und. coleta</label>
-      <label><input type="radio" name="malote_agrupado_por" value="Und. atendimento"> Und. atendimento</label>
-      <label><input type="radio" name="malote_agrupado_por" value="Fonte Pag."> Fonte Pag.</label>
-    </div>
-
-    <label>Unidade de destino por</label>
-    <div class="radio-group">
-      <label><input type="radio" name="unidade_destino_por" value="Setor de execução"> Setor de execução</label>
-      <label><input type="radio" name="unidade_destino_por" value="Unidade de processamento"> Unidade de processamento</label>
-    </div>
-
-    <label>Tempo de transporte (minutos)</label>
+    <label>Quanto tempo as amostras demoram para chegar na unidade de processamento (em minutos)</label>
     <input type="number" name="tempo_transporte" required>
 
     <h2>Templates</h2>
-    <label>Template de laudo</label>
-    <input type="text" name="template_laudo" required>
-
-    <label>Template e-LIS</label>
-    <input type="text" name="template_elis" required>
-
-    <label>Regras de impressão por ação (descreva se necessário)</label>
-    <textarea name="regras_impressao_acao" rows="3"></textarea>
+    <label>Usará template com logomarca?</label>
+    <div class="radio-group">
+      <label><input type="radio" name="usa_template_logomarca" value="Sim" id="templateLogoSim" required> Sim</label>
+      <label><input type="radio" name="usa_template_logomarca" value="Não" id="templateLogoNao" required> Não</label>
+    </div>
+    <div id="templateLogoUploadWrapper" style="display:none; margin-top:10px;">
+      <label>Anexe a logomarca</label>
+      <input type="file" name="template_logo" accept="image/*" id="templateLogoInput">
+    </div>
 
     <button type="submit" id="submitBtnUnidade">Enviar Cadastro de Unidade de Coleta</button>
   </form>
@@ -550,6 +565,19 @@
   // URL do Apps Script implantado como Web App
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwhkFZ8IDk_AX34Ee7sVRxM0R6aswHYuy-qSnZl7gV5-aIkm-ommSM3kmbtzWbr4ayn/exec";
 
+  const templateLogoSim = document.getElementById('templateLogoSim');
+  const templateLogoNao = document.getElementById('templateLogoNao');
+  const templateLogoUploadWrapper = document.getElementById('templateLogoUploadWrapper');
+  const templateLogoInput = document.getElementById('templateLogoInput');
+  [templateLogoSim, templateLogoNao].forEach(function (radio) {
+    radio.addEventListener('change', function () {
+      const mostrar = templateLogoSim.checked;
+      templateLogoUploadWrapper.style.display = mostrar ? 'block' : 'none';
+      templateLogoInput.required = mostrar;
+      if (!mostrar) templateLogoInput.value = '';
+    });
+  });
+
   const areaOutraCheck = document.getElementById('areaTrabalhoOutraCheck');
   const areaOutraTexto = document.getElementById('areaTrabalhoOutraTexto');
   areaOutraCheck.addEventListener('change', function () {
@@ -617,6 +645,13 @@
       payload.logo_cabecalho = await arquivoParaBase64(inputLogoCabecalho);
       payload.logo_rodape = await arquivoParaBase64(inputLogoRodape);
       payload.logo_assinatura = await arquivoParaBase64(inputLogoAssinatura);
+    }
+
+    if (tipoCadastro === 'unidade_coleta') {
+      const inputTemplateLogo = formEl.querySelector('input[name="template_logo"]').files[0];
+      if (inputTemplateLogo) {
+        payload.template_logo = await arquivoParaBase64(inputTemplateLogo);
+      }
     }
 
     try {
