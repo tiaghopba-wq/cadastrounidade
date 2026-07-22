@@ -28,7 +28,15 @@
 <div class="container">
   <h1>Formulário de Cadastro</h1>
 
+  <h2>Tipo de cadastro</h2>
+  <div class="radio-group" id="seletorTipo">
+    <label><input type="radio" name="tipo_selecionado" value="usuario"> Usuários</label>
+    <label><input type="radio" name="tipo_selecionado" value="fonte_pagadora"> Fonte Pagadora</label>
+    <label><input type="radio" name="tipo_selecionado" value="unidade_coleta"> Unidade de Coleta</label>
+  </div>
+
   <!-- ==================== FORMULÁRIO: UNIDADE DE COLETA ==================== -->
+  <div class="secao-cadastro" id="secaoUnidade" style="display:none">
   <form id="formUnidade">
     <h2 class="secao-titulo">Unidade de Coleta</h2>
 
@@ -188,10 +196,10 @@
   </form>
 
   <div id="successMsgUnidade" class="successMsg">✅ Cadastro de Unidade de Coleta enviado com sucesso!</div>
-
-  <hr class="divisor">
+  </div>
 
   <!-- ==================== FORMULÁRIO: FONTE PAGADORA ==================== -->
+  <div class="secao-cadastro" id="secaoFonte" style="display:none">
   <form id="formFonte">
     <h2 class="secao-titulo">Fonte Pagadora</h2>
 
@@ -263,6 +271,90 @@
   </form>
 
   <div id="successMsgFonte" class="successMsg">✅ Cadastro de Fonte Pagadora enviado com sucesso!</div>
+  </div>
+
+  <!-- ==================== FORMULÁRIO: USUÁRIOS ==================== -->
+  <div class="secao-cadastro" id="secaoUsuario" style="display:none">
+  <form id="formUsuario">
+    <h2 class="secao-titulo">Usuários</h2>
+
+    <h2>Identificação</h2>
+    <label>Nome do usuário</label>
+    <input type="text" name="nome_usuario" required>
+
+    <label>RG</label>
+    <input type="text" name="rg" required>
+
+    <label>CPF</label>
+    <input type="text" name="cpf" required>
+
+    <label>Data de nascimento</label>
+    <input type="date" name="data_nascimento" required>
+
+    <label>Sexo</label>
+    <div class="radio-group">
+      <label><input type="radio" name="sexo" value="M" required> M - Masculino</label>
+      <label><input type="radio" name="sexo" value="F" required> F - Feminino</label>
+      <label><input type="radio" name="sexo" value="I" required> I - Ignorado</label>
+      <label><input type="radio" name="sexo" value="N" required> N - Não informado</label>
+    </div>
+
+    <label>E-mail</label>
+    <input type="email" name="email_usuario" required>
+
+    <h2>Endereço</h2>
+    <label>CEP</label>
+    <input type="text" name="cep_usuario" required>
+
+    <label>Tipo de endereço</label>
+    <div class="radio-group">
+      <label><input type="radio" name="tipo_endereco" value="R" required> R - Residencial</label>
+      <label><input type="radio" name="tipo_endereco" value="C" required> C - Comercial</label>
+    </div>
+
+    <label>Endereço</label>
+    <input type="text" name="endereco_usuario" required>
+
+    <label>Número</label>
+    <input type="text" name="numero_usuario" required>
+
+    <label>Bairro</label>
+    <input type="text" name="bairro_usuario" required>
+
+    <label>Cidade</label>
+    <input type="text" name="cidade_usuario" required>
+
+    <label>Estado (UF)</label>
+    <input type="text" name="estado_usuario" maxlength="2" required>
+
+    <label>País</label>
+    <input type="text" name="pais" value="Brasil" required>
+
+    <h2>Contato</h2>
+    <label>DDD</label>
+    <input type="text" name="ddd" maxlength="2" required>
+
+    <label>Telefone celular</label>
+    <input type="tel" name="telefone_celular" required>
+
+    <h2>Dados profissionais</h2>
+    <label>Nro. conselho + estado</label>
+    <input type="text" name="conselho_estado">
+
+    <label>Local de trabalho (unidade de coleta)</label>
+    <input type="text" name="local_trabalho" required>
+
+    <label>Cargo</label>
+    <input type="text" name="cargo" required>
+
+    <label>Área de trabalho</label>
+    <input type="text" name="area_trabalho" required>
+
+    <button type="submit" id="submitBtnUsuario">Enviar Cadastro de Usuário</button>
+  </form>
+
+  <div id="successMsgUsuario" class="successMsg">✅ Cadastro de Usuário enviado com sucesso!</div>
+  </div>
 </div>
 
 <script>
@@ -341,6 +433,7 @@
 
   const formUnidade = document.getElementById('formUnidade');
   const formFonte = document.getElementById('formFonte');
+  const formUsuario = document.getElementById('formUsuario');
 
   formUnidade.addEventListener('submit', function (e) {
     e.preventDefault();
@@ -350,6 +443,24 @@
   formFonte.addEventListener('submit', function (e) {
     e.preventDefault();
     enviarFormulario(formFonte, 'fonte_pagadora', document.getElementById('submitBtnFonte'), document.getElementById('successMsgFonte'));
+  });
+
+  formUsuario.addEventListener('submit', function (e) {
+    e.preventDefault();
+    enviarFormulario(formUsuario, 'usuario', document.getElementById('submitBtnUsuario'), document.getElementById('successMsgUsuario'));
+  });
+
+  const secoesCadastro = {
+    usuario: document.getElementById('secaoUsuario'),
+    fonte_pagadora: document.getElementById('secaoFonte'),
+    unidade_coleta: document.getElementById('secaoUnidade')
+  };
+
+  document.querySelectorAll('input[name="tipo_selecionado"]').forEach(function (radio) {
+    radio.addEventListener('change', function () {
+      Object.values(secoesCadastro).forEach(function (secao) { secao.style.display = 'none'; });
+      secoesCadastro[radio.value].style.display = 'block';
+    });
   });
 </script>
 </body>
