@@ -1,131 +1,112 @@
-/**
- * Apps Script (Web App) que recebe os 3 formulários de index.html e grava
- * cada um em sua própria aba na planilha de destino, com base em
- * payload.tipo_cadastro: "usuario" | "fonte_pagadora" | "unidade_coleta".
- *
- * Como usar:
- * 1. Abra a planilha Google que já recebe os dados (a apontada por SCRIPT_URL).
- * 2. Extensões > Apps Script.
- * 3. Substitua o conteúdo de Code.gs por este arquivo (ajuste FOLDER_ID se
- *    quiser guardar os uploads de logomarca no Drive).
- * 4. Implantar > Gerenciar implantações > editar a implantação existente
- *    (mantém a mesma URL que já está em index.html).
- */
-
-// ID de uma pasta do Drive para salvar os uploads de logomarca (Fonte Pagadora).
-// Deixe '' para pular o upload e gravar apenas o nome do arquivo.
-var FOLDER_ID = '';
-
-var CONFIG = {
-  usuario: {
-    aba: 'Usuários',
-    campos: [
-      'nome_usuario', 'rg', 'cpf', 'data_nascimento', 'sexo', 'email_usuario',
-      'cep_usuario', 'tipo_endereco', 'endereco_usuario', 'numero_usuario',
-      'bairro_usuario', 'cidade_usuario', 'estado_usuario', 'pais', 'ddd',
-      'telefone_celular', 'conselho_estado', 'local_trabalho', 'cargo', 'area_trabalho'
-    ],
-    cabecalho: [
-      'Nome do usuário', 'RG', 'CPF', 'Data nascimento', 'Sexo', 'E-mail',
-      'CEP', 'Tipo endereço', 'Endereço', 'Número', 'Bairro', 'Cidade',
-      'Estado', 'País', 'DDD', 'Telefone celular', 'Nro. conselho + estado',
-      'Local de trabalho', 'Cargo', 'Área de trabalho'
-    ]
-  },
-  fonte_pagadora: {
-    aba: 'Fonte Pagadora',
-    campos: [
-      'descricao_fp', 'razao_social', 'nome_fantasia', 'tipo_fp', 'cnpj',
-      'inscricao_estadual', 'inscricao_municipal', 'email_fp', 'cep_fp',
-      'logradouro_fp', 'complemento_fp', 'numero_fp', 'bairro_fp', 'cidade_fp',
-      'estado_fp', 'telefone_fp', 'contato_responsavel_faturamento',
-      'dia_vencimento_faturamento', 'logo_cabecalho', 'logo_rodape', 'logo_assinatura'
-    ],
-    cabecalho: [
-      'Descrição', 'Razão social', 'Nome fantasia', 'Tipo', 'CNPJ',
-      'Inscrição estadual', 'Inscrição municipal', 'E-mail', 'CEP',
-      'Logradouro', 'Complemento', 'Número', 'Bairro', 'Cidade', 'Estado',
-      'Telefone', 'Contato faturamento', 'Dia vencimento faturamento',
-      'Logo cabeçalho', 'Logo rodapé', 'Logo assinatura'
-    ],
-    arquivos: ['logo_cabecalho', 'logo_rodape', 'logo_assinatura']
-  },
-  unidade_coleta: {
-    aba: 'Unidade de Coleta',
-    campos: [
-      'grupo_empresa', 'descricao', 'cartao_internet', 'regional', 'unidade',
-      'maioridade_excecao', 'cnes', 'responsavel_tecnico', 'obrigatoriedade',
-      'cep', 'logradouro', 'complemento', 'numero_endereco', 'bairro', 'cidade',
-      'estado', 'telefone', 'segmento', 'categoria', 'atendimento',
-      'inf_atendimento', 'permite_emergencia', 'permite_prazo_minimo',
-      'endereco_hospitalar', 'pedido_externo', 'prontuario',
-      'autorizacao_paciente_os', 'status_inicial_procedimento',
-      'dia_producao_padrao', 'dia_entrega_padrao', 'empresa_prestadora',
-      'percentual_max_desconto', 'imprime_resultado_debito',
-      'transportar_amostras_em', 'fechar_malote', 'malote_agrupado_por',
-      'unidade_destino_por', 'tempo_transporte', 'template_laudo',
-      'template_elis', 'regras_impressao_acao'
-    ],
-    cabecalho: [
-      'Grupo/Empresa', 'Descrição', 'Cartão internet', 'Regional', 'Unidade',
-      'Maioridade exceção', 'C.N.E.S.', 'Responsável técnico', 'Obrigatoriedade',
-      'CEP', 'Logradouro', 'Complemento', 'Número', 'Bairro', 'Cidade', 'Estado',
-      'Telefone', 'Segmento', 'Categoria', 'Atendimento', 'Inf. atendimento',
-      'Permite emergência', 'Permite prazo mínimo', 'Endereço hospitalar',
-      'Pedido externo', 'Prontuário', 'Autorização paciente O.S.',
-      'Status inicial procedimento', 'Dia produção padrão', 'Dia entrega padrão',
-      'Empresa prestadora', '% máx desconto', 'Imprime resultado débito',
-      'Transportar amostras em', 'Fechar malote', 'Malote agrupado por',
-      'Unidade destino por', 'Tempo transporte', 'Template laudo',
-      'Template e-LIS', 'Regras impressão'
-    ]
-  }
-};
-
 function doPost(e) {
-  var payload = JSON.parse(e.postData.contents);
-  var tipo = payload.tipo_cadastro;
-  var config = CONFIG[tipo];
-  if (!config) {
-    return ContentService.createTextOutput(JSON.stringify({ ok: false, erro: 'tipo_cadastro inválido' }))
-      .setMimeType(ContentService.MimeType.JSON);
-  }
+  try {
+    var data = JSON.parse(e.postData.contents);
+    var ss = SpreadsheetApp.openById('1VPh5iIM4nvT8fMDNelnlRPRS_maVxg6uuYsMrbAJXVg');
 
-  var planilha = SpreadsheetApp.getActiveSpreadsheet();
-  var aba = planilha.getSheetByName(config.aba);
-  if (!aba) {
-    aba = planilha.insertSheet(config.aba);
-    aba.appendRow(['Data/Hora envio'].concat(config.cabecalho));
-  }
-
-  var linha = [new Date()];
-  config.campos.forEach(function (campo) {
-    var valor = payload[campo];
-
-    if (config.arquivos && config.arquivos.indexOf(campo) !== -1) {
-      linha.push(salvarArquivo(valor));
-      return;
+    if (data.tipo_cadastro === 'fonte_pagadora') {
+      salvarFontePagadora(ss, data);
+    } else if (data.tipo_cadastro === 'usuario') {
+      salvarUsuario(ss, data);
+    } else {
+      salvarUnidadeColeta(ss, data);
     }
-    if (Array.isArray(valor)) {
-      linha.push(valor.join(', '));
-      return;
-    }
-    linha.push(valor === undefined || valor === null ? '' : valor);
-  });
-
-  aba.appendRow(linha);
-
-  return ContentService.createTextOutput(JSON.stringify({ ok: true }))
-    .setMimeType(ContentService.MimeType.JSON);
+    return ContentService.createTextOutput(JSON.stringify({ result: 'success' })).setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService.createTextOutput(JSON.stringify({ result: 'error', error: err.toString() })).setMimeType(ContentService.MimeType.JSON);
+  }
 }
 
-function salvarArquivo(arquivo) {
-  if (!arquivo || !arquivo.base64) return '';
-  if (!FOLDER_ID) return arquivo.filename || '';
+function getOrCreateSheet(ss, name, headers) {
+  var sheet = ss.getSheetByName(name);
+  if (!sheet) sheet = ss.insertSheet(name);
+  if (sheet.getLastRow() === 0) sheet.appendRow(headers);
+  return sheet;
+}
 
-  var bytes = Utilities.base64Decode(arquivo.base64);
-  var blob = Utilities.newBlob(bytes, arquivo.mimeType, arquivo.filename);
-  var pasta = DriveApp.getFolderById(FOLDER_ID);
-  var arquivoSalvo = pasta.createFile(blob);
-  return arquivoSalvo.getUrl();
+function multi(d, name) {
+  var v = d[name];
+  if (!v) return '';
+  return Array.isArray(v) ? v.join(', ') : v;
+}
+
+function salvarArquivo(fileObj, pastaNome) {
+  if (!fileObj || !fileObj.base64) return '';
+  var pastas = DriveApp.getFoldersByName(pastaNome);
+  var pasta = pastas.hasNext() ? pastas.next() : DriveApp.createFolder(pastaNome);
+  var bytes = Utilities.base64Decode(fileObj.base64);
+  var blob = Utilities.newBlob(bytes, fileObj.mimeType, fileObj.filename);
+  var arquivo = pasta.createFile(blob);
+  // Por padrão o arquivo fica privado (só você acessa). Se quiser um link público
+  // para usar em laudos, descomente a linha abaixo (isso torna o arquivo acessível
+  // por qualquer pessoa com o link):
+  // arquivo.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+  return arquivo.getUrl();
+}
+
+function salvarUnidadeColeta(ss, d) {
+  var headers = [
+    'Timestamp','Grupo/Empresa','Descrição (Nome da Unidade)','Cartão internet','Regional','Unidade',
+    'Maioridade (exceção)','C.N.E.S.','Responsável técnico','Obrigatoriedade',
+    'CEP','Logradouro','Complemento','Número','Bairro','Cidade','Estado','Telefone',
+    'Segmento','Categoria','Atendimento','Informações de atendimento',
+    'Permite emergência','Permite prazo mínimo','Endereço hospitalar','Pedido externo','Prontuário',
+    'Autorização paciente O.S.','Status inicial procedimento','Dia produção padrão','Dia entrega padrão',
+    'Empresa prestadora','Percentual máximo desconto','Imprime resultado em débito',
+    'Transportar amostras em','Fechar malote','Malote agrupado por','Unidade destino por',
+    'Tempo de transporte (min)','Template de laudo','Template e-LIS','Regras impressão por ação'
+  ];
+  var sheet = getOrCreateSheet(ss, 'UnidadeColeta', headers);
+
+  var row = [
+    new Date(), d.grupo_empresa || '', d.descricao || '', d.cartao_internet || '', d.regional || '', d.unidade || '',
+    d.maioridade_excecao || '', d.cnes || '', d.responsavel_tecnico || '', multi(d, 'obrigatoriedade'),
+    d.cep || '', d.logradouro || '', d.complemento || '', d.numero_endereco || '', d.bairro || '', d.cidade || '', d.estado || '', d.telefone || '',
+    multi(d, 'segmento'), d.categoria || '', d.atendimento || '', d.inf_atendimento || '',
+    d.permite_emergencia ? 'Sim' : 'Não', d.permite_prazo_minimo ? 'Sim' : 'Não', d.endereco_hospitalar ? 'Sim' : 'Não',
+    d.pedido_externo ? 'Sim' : 'Não', d.prontuario ? 'Sim' : 'Não', d.autorizacao_paciente_os ? 'Sim' : 'Não',
+    d.status_inicial_procedimento || '', d.dia_producao_padrao ? 'Sim' : 'Não', d.dia_entrega_padrao ? 'Sim' : 'Não',
+    d.empresa_prestadora || '', d.percentual_max_desconto || '', d.imprime_resultado_debito ? 'Sim' : 'Não',
+    d.transportar_amostras_em || '', d.fechar_malote || '', d.malote_agrupado_por || '', d.unidade_destino_por || '',
+    d.tempo_transporte || '', d.template_laudo || '', d.template_elis || '', d.regras_impressao_acao || ''
+  ];
+  sheet.appendRow(row);
+}
+
+function salvarFontePagadora(ss, d) {
+  var headers = [
+    'Timestamp','Descrição','Razão social','Nome fantasia','Tipo','CNPJ','Inscrição estadual','Inscrição municipal','E-mail',
+    'CEP','Logradouro','Complemento','Número','Bairro','Cidade','Estado','Telefone',
+    'Contato responsável faturamento','Dia vencimento faturamento',
+    'Logomarca cabeçalho (link)','Logomarca rodapé (link)','Logomarca assinatura (link)'
+  ];
+  var sheet = getOrCreateSheet(ss, 'FontePagadora', headers);
+
+  var linkCabecalho = salvarArquivo(d.logo_cabecalho, 'Logomarcas Fonte Pagadora');
+  var linkRodape = salvarArquivo(d.logo_rodape, 'Logomarcas Fonte Pagadora');
+  var linkAssinatura = salvarArquivo(d.logo_assinatura, 'Logomarcas Fonte Pagadora');
+
+  var row = [
+    new Date(), d.descricao_fp || '', d.razao_social || '', d.nome_fantasia || '', d.tipo_fp || '',
+    d.cnpj || '', d.inscricao_estadual || '', d.inscricao_municipal || '', d.email_fp || '',
+    d.cep_fp || '', d.logradouro_fp || '', d.complemento_fp || '', d.numero_fp || '', d.bairro_fp || '', d.cidade_fp || '', d.estado_fp || '', d.telefone_fp || '',
+    d.contato_responsavel_faturamento || '', d.dia_vencimento_faturamento || '',
+    linkCabecalho, linkRodape, linkAssinatura
+  ];
+  sheet.appendRow(row);
+}
+
+function salvarUsuario(ss, d) {
+  var headers = [
+    'Timestamp','Nome do usuário','RG','CPF','Data nascimento','Sexo','E-mail',
+    'CEP','Tipo endereço','Endereço','Número','Bairro','Cidade','Estado','País',
+    'DDD','Telefone celular','Nro. conselho + estado','Local de trabalho','Cargo','Área de trabalho'
+  ];
+  var sheet = getOrCreateSheet(ss, 'Usuarios', headers);
+
+  var row = [
+    new Date(), d.nome_usuario || '', d.rg || '', d.cpf || '', d.data_nascimento || '', d.sexo || '', d.email_usuario || '',
+    d.cep_usuario || '', d.tipo_endereco || '', d.endereco_usuario || '', d.numero_usuario || '', d.bairro_usuario || '', d.cidade_usuario || '', d.estado_usuario || '', d.pais || '',
+    d.ddd || '', d.telefone_celular || '', d.conselho_estado || '', d.local_trabalho || '', d.cargo || '', d.area_trabalho || ''
+  ];
+  sheet.appendRow(row);
 }
