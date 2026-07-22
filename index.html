@@ -215,12 +215,12 @@
 
     <label>Tipo</label>
     <div class="radio-group" data-group="tipo_fp">
-      <label><input type="radio" name="tipo_fp" value="Balcão"> Balcão</label>
+      <label><input type="radio" name="tipo_fp" value="Particular"> Particular</label>
       <label><input type="radio" name="tipo_fp" value="Faturado"> Faturado</label>
     </div>
 
     <label>CNPJ</label>
-    <input type="text" name="cnpj" required>
+    <input type="text" name="cnpj" class="somente-numero" inputmode="numeric" pattern="\d{14}" maxlength="14" title="Digite os 14 números do CNPJ, sem ponto, barra ou traço" required>
 
     <label>Inscrição estadual</label>
     <input type="text" name="inscricao_estadual" required>
@@ -233,7 +233,7 @@
 
     <h2>Endereço</h2>
     <label>CEP</label>
-    <input type="text" name="cep_fp" required>
+    <input type="text" name="cep_fp" class="somente-numero" inputmode="numeric" pattern="\d{8}" maxlength="8" title="Digite os 8 números do CEP, sem traço" required>
     <label>Logradouro</label>
     <input type="text" name="logradouro_fp" required>
     <label>Complemento</label>
@@ -245,7 +245,36 @@
     <label>Cidade</label>
     <input type="text" name="cidade_fp" required>
     <label>Estado (UF)</label>
-    <input type="text" name="estado_fp" maxlength="2" required>
+    <select name="estado_fp" required>
+      <option value="">Selecione...</option>
+      <option value="AC">AC</option>
+      <option value="AL">AL</option>
+      <option value="AP">AP</option>
+      <option value="AM">AM</option>
+      <option value="BA">BA</option>
+      <option value="CE">CE</option>
+      <option value="DF">DF</option>
+      <option value="ES">ES</option>
+      <option value="GO">GO</option>
+      <option value="MA">MA</option>
+      <option value="MT">MT</option>
+      <option value="MS">MS</option>
+      <option value="MG">MG</option>
+      <option value="PA">PA</option>
+      <option value="PB">PB</option>
+      <option value="PR">PR</option>
+      <option value="PE">PE</option>
+      <option value="PI">PI</option>
+      <option value="RJ">RJ</option>
+      <option value="RN">RN</option>
+      <option value="RS">RS</option>
+      <option value="RO">RO</option>
+      <option value="RR">RR</option>
+      <option value="SC">SC</option>
+      <option value="SP">SP</option>
+      <option value="SE">SE</option>
+      <option value="TO">TO</option>
+    </select>
 
     <h2>Contato e Faturamento</h2>
     <label>Telefone</label>
@@ -255,7 +284,7 @@
     <input type="text" name="contato_responsavel_faturamento" required>
 
     <label>Dia do vencimento do faturamento</label>
-    <input type="number" min="1" max="31" name="dia_vencimento_faturamento" required>
+    <input type="text" name="dia_vencimento_faturamento" class="somente-numero" inputmode="numeric" pattern="\d{1,2}" maxlength="2" title="Digite o dia do vencimento (somente números, até 2 dígitos)" required>
 
     <h2>Logomarcas</h2>
     <label>Upload de logomarca para cabeçalho de laudo</label>
@@ -295,8 +324,6 @@
     <div class="radio-group">
       <label><input type="radio" name="sexo" value="M" required> M - Masculino</label>
       <label><input type="radio" name="sexo" value="F" required> F - Feminino</label>
-      <label><input type="radio" name="sexo" value="I" required> I - Ignorado</label>
-      <label><input type="radio" name="sexo" value="N" required> N - Não informado</label>
     </div>
 
     <label>E-mail</label>
@@ -304,7 +331,7 @@
 
     <h2>Endereço</h2>
     <label>CEP</label>
-    <input type="text" name="cep_usuario" required>
+    <input type="text" name="cep_usuario" class="somente-numero" inputmode="numeric" pattern="\d{8}" maxlength="8" title="Digite os 8 números do CEP, sem traço" required>
 
     <label>Tipo de endereço</label>
     <div class="radio-group">
@@ -325,7 +352,36 @@
     <input type="text" name="cidade_usuario" required>
 
     <label>Estado (UF)</label>
-    <input type="text" name="estado_usuario" maxlength="2" required>
+    <select name="estado_usuario" required>
+      <option value="">Selecione...</option>
+      <option value="AC">AC</option>
+      <option value="AL">AL</option>
+      <option value="AP">AP</option>
+      <option value="AM">AM</option>
+      <option value="BA">BA</option>
+      <option value="CE">CE</option>
+      <option value="DF">DF</option>
+      <option value="ES">ES</option>
+      <option value="GO">GO</option>
+      <option value="MA">MA</option>
+      <option value="MT">MT</option>
+      <option value="MS">MS</option>
+      <option value="MG">MG</option>
+      <option value="PA">PA</option>
+      <option value="PB">PB</option>
+      <option value="PR">PR</option>
+      <option value="PE">PE</option>
+      <option value="PI">PI</option>
+      <option value="RJ">RJ</option>
+      <option value="RN">RN</option>
+      <option value="RS">RS</option>
+      <option value="RO">RO</option>
+      <option value="RR">RR</option>
+      <option value="SC">SC</option>
+      <option value="SP">SP</option>
+      <option value="SE">SE</option>
+      <option value="TO">TO</option>
+    </select>
 
     <label>País</label>
     <input type="text" name="pais" value="Brasil" required>
@@ -345,10 +401,143 @@
     <input type="text" name="local_trabalho" required>
 
     <label>Cargo</label>
-    <input type="text" name="cargo" required>
+    <input type="text" name="cargo" list="listaCargosCBO" placeholder="Digite para buscar..." autocomplete="off" required>
+    <datalist id="listaCargosCBO">
+      <option value="Auxiliar Administrativo">
+      <option value="Assistente Administrativo">
+      <option value="Analista Administrativo">
+      <option value="Técnico Administrativo">
+      <option value="Recepcionista">
+      <option value="Secretária Executiva">
+      <option value="Secretária">
+      <option value="Office-boy">
+      <option value="Contínuo">
+      <option value="Arquivista">
+      <option value="Digitador">
+      <option value="Atendente de Consultório">
+      <option value="Atendente de Recepção">
+      <option value="Operador de Telemarketing">
+      <option value="Auxiliar de Atendimento">
+      <option value="Analista de Relacionamento com Cliente">
+      <option value="Supervisor de Atendimento">
+      <option value="Consultor Comercial">
+      <option value="Representante Comercial">
+      <option value="Vendedor">
+      <option value="Biomédico">
+      <option value="Bioquímico">
+      <option value="Farmacêutico">
+      <option value="Farmacêutico Bioquímico">
+      <option value="Médico Patologista Clínico">
+      <option value="Médico do Trabalho">
+      <option value="Médico Clínico Geral">
+      <option value="Enfermeiro">
+      <option value="Técnico de Enfermagem">
+      <option value="Auxiliar de Enfermagem">
+      <option value="Técnico em Patologia Clínica">
+      <option value="Auxiliar de Laboratório">
+      <option value="Técnico de Laboratório">
+      <option value="Flebotomista">
+      <option value="Coletor de Material Biológico">
+      <option value="Citotécnico">
+      <option value="Histotécnico">
+      <option value="Nutricionista">
+      <option value="Fisioterapeuta">
+      <option value="Psicólogo">
+      <option value="Fonoaudiólogo">
+      <option value="Técnico em Radiologia">
+      <option value="Odontólogo">
+      <option value="Auxiliar de Saúde Bucal">
+      <option value="Analista Financeiro">
+      <option value="Assistente Financeiro">
+      <option value="Auxiliar Financeiro">
+      <option value="Analista de Faturamento">
+      <option value="Assistente de Faturamento">
+      <option value="Auxiliar de Faturamento">
+      <option value="Analista de Contas a Receber">
+      <option value="Analista de Contas a Pagar">
+      <option value="Contador">
+      <option value="Auxiliar Contábil">
+      <option value="Técnico em Contabilidade">
+      <option value="Tesoureiro">
+      <option value="Analista de Cobrança">
+      <option value="Assistente de Cobrança">
+      <option value="Caixa">
+      <option value="Comprador">
+      <option value="Analista de Compras">
+      <option value="Assistente de Compras">
+      <option value="Almoxarife">
+      <option value="Auxiliar de Almoxarifado">
+      <option value="Auxiliar de Estoque">
+      <option value="Analista de Estoque">
+      <option value="Analista de Suprimentos">
+      <option value="Auxiliar de Logística">
+      <option value="Analista de Logística">
+      <option value="Motorista">
+      <option value="Motorista Entregador">
+      <option value="Auxiliar de Expedição">
+      <option value="Analista de Recursos Humanos">
+      <option value="Assistente de Recursos Humanos">
+      <option value="Auxiliar de Departamento Pessoal">
+      <option value="Analista de Departamento Pessoal">
+      <option value="Recrutador">
+      <option value="Analista de Recrutamento e Seleção">
+      <option value="Técnico de Segurança do Trabalho">
+      <option value="Analista de Treinamento e Desenvolvimento">
+      <option value="Analista de Qualidade">
+      <option value="Assistente de Qualidade">
+      <option value="Coordenador de Qualidade">
+      <option value="Auditor de Qualidade">
+      <option value="Supervisor de Qualidade">
+      <option value="Analista de Sistemas">
+      <option value="Analista de Suporte">
+      <option value="Técnico em Informática">
+      <option value="Desenvolvedor de Software">
+      <option value="Analista de Infraestrutura de TI">
+      <option value="Assistente de TI">
+      <option value="Técnico de Manutenção">
+      <option value="Auxiliar de Manutenção">
+      <option value="Eletricista">
+      <option value="Encanador">
+      <option value="Técnico em Refrigeração">
+      <option value="Auxiliar de Serviços Gerais">
+      <option value="Diretor">
+      <option value="Diretor Técnico">
+      <option value="Diretor Administrativo">
+      <option value="Diretor Financeiro">
+      <option value="Gerente Geral">
+      <option value="Gerente Administrativo">
+      <option value="Gerente Financeiro">
+      <option value="Gerente de Unidade">
+      <option value="Gerente Comercial">
+      <option value="Gerente de Operações">
+      <option value="Supervisor">
+      <option value="Coordenador">
+      <option value="Coordenador de Unidade">
+      <option value="Coordenador Técnico">
+      <option value="Copeira">
+      <option value="Porteiro">
+      <option value="Vigilante">
+      <option value="Zelador">
+      <option value="Auxiliar de Limpeza">
+      <option value="Mensageiro">
+    </datalist>
 
     <label>Área de trabalho</label>
-    <input type="text" name="area_trabalho" required>
+    <select name="area_trabalho" required>
+      <option value="">Selecione...</option>
+      <option value="Atendimento">Atendimento</option>
+      <option value="Vacinas">Vacinas</option>
+      <option value="Recursos Humanos">Recursos Humanos</option>
+      <option value="Qualidade">Qualidade</option>
+      <option value="Financeiro">Financeiro</option>
+      <option value="Faturamento">Faturamento</option>
+      <option value="Área Técnica">Área Técnica</option>
+      <option value="Estoque">Estoque</option>
+      <option value="Compras">Compras</option>
+      <option value="Direção">Direção</option>
+      <option value="Manutenção">Manutenção</option>
+      <option value="Outra">Outra</option>
+    </select>
 
     <button type="submit" id="submitBtnUsuario">Enviar Cadastro de Usuário</button>
   </form>
@@ -360,6 +549,13 @@
 <script>
   // URL do Apps Script implantado como Web App
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwhkFZ8IDk_AX34Ee7sVRxM0R6aswHYuy-qSnZl7gV5-aIkm-ommSM3kmbtzWbr4ayn/exec";
+
+  document.querySelectorAll('.somente-numero').forEach(function (input) {
+    input.addEventListener('input', function () {
+      const limite = input.maxLength > 0 ? input.maxLength : undefined;
+      input.value = input.value.replace(/\D/g, '').slice(0, limite);
+    });
+  });
 
   function checkboxGrupoValido(formEl) {
     const grupos = formEl.querySelectorAll('[data-group]');
